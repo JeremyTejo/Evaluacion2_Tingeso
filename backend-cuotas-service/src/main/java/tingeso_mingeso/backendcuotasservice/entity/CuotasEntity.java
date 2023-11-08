@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "cuotas")
@@ -13,11 +14,12 @@ import javax.validation.constraints.NotNull;
 @Data
 public class CuotasEntity {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long idCuota;
     private String rut;
-    private int numeroCuota;
-    private float valorCuota;
-    private boolean estado;
+    private LocalDate fechaPago;
+    private LocalDate fechaVencimiento;
+    private double montoCuota;
+    private String estadoCuota;
+    private int mesesAtraso = 0;
 }

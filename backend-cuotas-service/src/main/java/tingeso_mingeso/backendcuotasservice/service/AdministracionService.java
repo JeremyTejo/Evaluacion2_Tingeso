@@ -4,98 +4,71 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Period;
 
 @Data
 @Service
 public class AdministracionService {
 
-    private final int matricula = 70000;
-    private final int arancel = 1500000;
+    private static final int ARANCEL_BASE = 1500000; // Arancel de estudio base
+    private static final int MATRICULA = 70000; // Valor de la matrícula
 
-    private final int contado=50;
-
-    public int descuentoTipoColegio(String tipoColegio){
-        if(tipoColegio.equals("Municipal")){
-            return 20;
-        }
-        else if(tipoColegio.equals("Subvencionado")){
-            return 10;
-        }
-        else{
-            return 0;
-        }
+    // Método para obtener el arancel base (podría ser un valor fijo o recuperado de una base de datos/configuración)
+    public int getArancel() {
+        return ARANCEL_BASE;
     }
-    public int descuentoTipoColegio(int id_tipoColegio){
-        if(id_tipoColegio == 1){
-            return 20;
-        }
-        else if(id_tipoColegio == 2){
-            return 10;
-        }
-        else{
-            return 0;
+
+    // Método para calcular el descuento por tipo de colegio de procedencia
+    public int descuentoTipoColegio(String tipoColegio) {
+        switch (tipoColegio) {
+            case "Municipal":
+                return 20; // 20% de descuento
+            case "Subvencionado":
+                return 10; // 10% de descuento
+            case "Privado":
+                return 0; // Sin descuento
+            default:
+                throw new IllegalArgumentException("Tipo de colegio desconocido");
         }
     }
 
-
-    public int descuentoEgresoColegio(LocalDate fechaEgresoColegio, LocalDate fechaIngresoPreu){
-        int difAnio = fechaIngresoPreu.getYear() - fechaEgresoColegio.getYear();
-        int difDays = fechaIngresoPreu.getDayOfYear() - fechaEgresoColegio.getDayOfYear();
-        System.out.println("difAnio = " + difAnio);
-        System.out.println("DifDays = " + difDays);
-        if(difDays < 0) {
-            difAnio--;
-        }
-        if(difAnio <= 1){
-            return 15;
-        }
-        else if(difAnio <= 2){
-            return 8;
-        }
-        else if(difAnio <= 4){
-            return 4;
-        }
-        else{
-            return 0;
+    // Método para calcular el descuento por años de egreso del colegio
+    public int descuentoEgresoColegio(String fechaEgreso, String fechaIngreso) {
+        int aniosDesdeEgreso = Period.between(LocalDate.parse(fechaEgreso), LocalDate.now()).getYears();
+        if (aniosDesdeEgreso < 1) {
+            return 15; // 15% de descuento
+        } else if (aniosDesdeEgreso <= 2) {
+            return 8; // 8% de descuento
+        } else if (aniosDesdeEgreso <= 4) {
+            return 4; // 4% de descuento
+        } else {
+            return 0; // Sin descuento
         }
     }
 
-    public int descuentePuntajePruebas(int puntaje){
-        if(puntaje >= 950 && puntaje <= 1000){
-            return 10;
-        }
-        else if(puntaje >= 900 && puntaje<=949){
-            return 5;
-        }
-        else if(puntaje >= 850 && puntaje<=899){
-            return 5;
-        }
-        else{
-            return 0;
-        }
-    }
-
-    public int interesMesesAtraso(int mesesInteres){
-        if(mesesInteres==0){
-            return 0;
-        } else if (mesesInteres == 1) {
-            return 3;
-        } else if (mesesInteres == 2) {
-            return 6;
-        } else if (mesesInteres == 3) {
-            return 9;
-        }else{
-            return 15;
+    // Método para calcular el número máximo de cuotas según el tipo de colegio
+    public int obtenerNumeroMaximoCuotas(String tipoColegio) {
+        switch (tipoColegio) {
+            case "Municipal":
+                return 10;
+            case "Subvencionado":
+                return 7;
+            case "Privado":
+                return 4;
+            default:
+                throw new IllegalArgumentException("Tipo de colegio desconocido");
         }
     }
 
-    public boolean PreguntarCuotas(int id_tipoColegio, int cantidadCuotas){
-        if(id_tipoColegio==1){
-            return cantidadCuotas <= 10;
-        } else if (id_tipoColegio==2) {
-            return cantidadCuotas <= 7;
-        } else{
-            return cantidadCuotas <= 4;
-        }
+    // Método para calcular la fecha de vencimiento de cada cuota
+    public LocalDate calcularFechaVencimiento(int numeroCuota) {
+        // Asumiendo que el año académico comienza en marzo y las cuotas se pagan entre el 5 y el 10 de cada mes
+        LocalDate inicioClases = LocalDate.of(LocalDate.now().getYear(), Month.MARCH, 5);
+        return inicioClases.plusMonths(numeroCuota - 1);
     }
+
+    // ... Otros métodos que puedas necesitar, como cálculo de intereses por atraso, etc. ...
 }
+
+

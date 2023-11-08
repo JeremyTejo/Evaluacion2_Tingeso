@@ -10,53 +10,81 @@ import tingeso_mingeso.backendcuotasservice.entity.CuotasEntity;
 import tingeso_mingeso.backendcuotasservice.model.EstudianteEntity;
 import tingeso_mingeso.backendcuotasservice.repository.CuotasRepository;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 
 
 @Service
 public class CuotasService {
-    @Autowired
-    CuotasRepository cuotasRepository;
+
+    private final CuotasRepository cuotaRepository;
+    private final RestTemplate restTemplate;
+    private final AdministracionService administracionService;
 
     @Autowired
-    AdministracionService administracionService;
+    public CuotasService(CuotasRepository cuotaRepository, RestTemplate restTemplate, AdministracionService administracionService) {
+        this.cuotaRepository = cuotaRepository;
+        this.restTemplate = restTemplate;
+        this.administracionService = administracionService;
+    }
 
-    @Autowired
-    RestTemplate restTemplate;
+    // ... Otros métodos del servicio ...
 
-    public void descuentoArancel_generacionCuotas(EstudianteEntity estudianteEntity, int cantidadCuotas){
-        if(administracionService.PreguntarCuotas(estudianteEntity.getTipo_colegio(), cantidadCuotas)){
-            int descuentoTipoColegio = administracionService.descuentoTipoColegio(estudianteEntity.getTipo_colegio());
-            int descuentoAnio = administracionService.descuentoEgresoColegio(estudianteEntity.getAnio_egreso(), estudianteEntity.getAnio_ingreso());
-            int descuento_total = descuentoTipoColegio + descuentoAnio;
-            float descuento_decimal = (float) descuento_total/100;
-            int valorArancel = (int) (administracionService.getArancel() * (1-descuento_decimal));
-            float cuota = (float) valorArancel/cantidadCuotas;
-            int i = 1;
-            CuotasEntity cuotasEntity;
-            while (i <= cantidadCuotas){
-                cuotasEntity = new CuotasEntity();
-                cuotasEntity.setNumeroCuota(i);
-                cuotasEntity.setValorCuota(cuota);
-                cuotasEntity.setRut(estudianteEntity.getRut());
-                cuotasEntity.setEstado(true);
-                cuotasRepository.save(cuotasEntity);
-                i++;
-            }
+    public void generarCuotas(String rut) {
+        EstudianteEntity estudiante = findByRut(rut);
+        int cantidadCuotas = administracionService.obtenerNumeroMaximoCuotas(estudiante.getTipoColegio());
+        descuentoArancelGeneracionCuotas(estudiante, cantidadCuotas);
+    }
+
+    private void descuentoArancelGeneracionCuotas(EstudianteEntity estudiante, int cantidadCuotas) {
+        int descuentoTipoColegio = administracionService.descuentoTipoColegio(estudiante.getTipoColegio());
+        int descuentoAnio = administracionService.descuentoEgresoColegio(estudiante.getFechaEgresoColegio(), estudiante.getFechaIngresoColegio());
+        int descuentoTotal = descuentoTipoColegio + descuentoAnio;
+        float descuentoDecimal = (float) descuentoTotal / 100;
+        int valorArancel = (int) (administracionService.getArancel() * (1 - descuentoDecimal));
+        float cuotaValor = (float) valorArancel / cantidadCuotas;
+
+        for (int i = 1; i <= cantidadCuotas; i++) {
+            CuotasEntity cuota = new CuotasEntity();
+            cuota.setMontoCuota(cuotaValor);
+            cuota.setEstadoCuota("Pendiente");
+            cuota.setFechaVencimiento(administracionService.calcularFechaVencimiento(i));
+            // Aquí asumimos que tienes un método para asignar el RUT del estudiante a la cuota
+            cuota.setRut(estudiante.getRut());
+            cuotaRepository.save(cuota);
         }
     }
 
-    public EstudianteEntity findByRut(String rut){
-        System.out.println("rut: "+rut);
+    private EstudianteEntity findByRut(String rut) {
         ResponseEntity<EstudianteEntity> response = restTemplate.exchange(
-                "http://localhost:8080/estudiante/"+rut,
+                "http://localhost:8080/estudiante/" + rut,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<EstudianteEntity>() {}
         );
         return response.getBody();
     }
-    public List<CuotasEntity> findCuotaByRut(String rut){
-        return cuotasRepository.findCuotaByRut(rut);
+
+    public List<CuotasEntity> findCuotasByRut(String rut) {
+        return cuotaRepository.findCuotasByRut(rut);
+    }
+
+    public CuotasEntity registrarPagoCuota(Long idCuota) {
+        // Obtener la cuota por su ID
+        CuotasEntity cuota = cuotaRepository.findById(idCuota)
+                .orElseThrow(() -> new EntityNotFoundException("Cuota no encontrada con id: " + idCuota));
+
+        // Verificar si la cuota ya está pagada
+        if ("Pagado".equals(cuota.getEstadoCuota())) {
+            throw new IllegalStateException("La cuota ya está pagada.");
+        }
+
+        // Registrar el pago
+        cuota.setEstadoCuota("Pagado");
+        cuota.setFechaPago(LocalDate.now()); // Asumiendo que tienes un campo para la fecha de pago
+
+        // Guardar la cuota actualizada
+        return cuotaRepository.save(cuota);
     }
 }

@@ -9,16 +9,19 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EstudianteEntity {
+
     private String rut;
-    private String nombres;
-    private String apellidos;
-    private LocalDate fecha_nacimiento;
-    private int tipo_colegio;
-    private String nombre_colegio;
-    private LocalDate anio_egreso;
-    private LocalDate anio_ingreso;
+
+    private String nombre;
+    private String apellido;
+    private LocalDate fechaNacimiento;
+    private String tipoColegio;
+    private String nombreColegio;
+    private String fechaEgresoColegio;
+    private String fechaIngresoColegio;
+
 }
