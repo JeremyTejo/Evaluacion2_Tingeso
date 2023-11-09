@@ -7,6 +7,6 @@ spring:
     config:
       server:
         git:
-          default-label: master
-          uri: https://github.com/JeremyTejo/Evaluacion2_Tingeso.git
-          search-paths: "https://github.com/JeremyTejo/Evaluacion2_Tingeso/config-data"
+          default-label: main
+          uri: https://github.com/JeremyTejo/Evaluacion2_Tingeso
+          search-paths: config-data
