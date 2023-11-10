@@ -11,17 +11,16 @@ import tingeso_mingeso.backendcuotasservice.service.CuotasService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/cuotas")
 public class CuotasController {
 
     private final CuotasService cuotasService;
-    private final AdministracionService administracionService;
 
     @Autowired
     public CuotasController(CuotasService cuotasService, AdministracionService administracionService) {
         this.cuotasService = cuotasService;
-        this.administracionService = administracionService;
     }
 
     // Endpoint para generar cuotas para un estudiante dado su RUT
@@ -56,6 +55,5 @@ public class CuotasController {
         }
     }
 
-    // ... Otros endpoints que puedas necesitar ...
 
 }

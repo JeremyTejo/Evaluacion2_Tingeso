@@ -38,13 +38,13 @@ function ListadoEstudianteComponent() {
                             estudianteEntity.map((estudiante) => (
                                 <tr key= {estudiante.rut}>
                                     <td> {estudiante.rut} </td>
-                                    <td> {estudiante.nombres} </td>
-                                    <td> {estudiante.apellidos} </td>
-                                    <td> {estudiante.fecha_nacimiento} </td>
-                                    <td> {estudiante.tipo_colegio} </td>
-                                    <td> {estudiante.nombre_colegio} </td>
-                                    <td> {estudiante.anio_egreso} </td>
-                                    <td> {estudiante.anio_ingreso} </td>
+                                    <td> {estudiante.nombre} </td>
+                                    <td> {estudiante.apellido} </td>
+                                    <td> {estudiante.fechaNacimiento} </td>
+                                    <td> {estudiante.tipoColegio} </td>
+                                    <td> {estudiante.nombreColegio} </td>
+                                    <td> {estudiante.fechaEgresoColegio} </td>
+                                    <td> {estudiante.fechaIngresoColegio} </td>
                                 </tr>
                             ))
                         }

@@ -10,12 +10,12 @@ function AgregarEstudianteComponent(props){
 
     const initialState = {
         rut: "",
-        nombres: "",
-        apellidos: "",
-        fecha_nacimiento: "",
-        tipo_colegio: "",
-        nombre_colegio: "",
-        anio_egreso: "",
+        nombre: "",
+        apellido: "",
+        fechaNacimiento: "",
+        tipoColegio: "",
+        nombreColegio: "",
+        fechaEgresoColegio: "",
     };
 
     const [input, setInput] = useState(initialState);
@@ -28,22 +28,22 @@ function AgregarEstudianteComponent(props){
         setInput({ ...input, rut: event.target.value });
     };
     const changeNombresHandler = event => {
-        setInput({ ...input, nombres: event.target.value });
+        setInput({ ...input, nombre: event.target.value });
     };
     const changeApellidoHandler = event => {
-        setInput({ ...input, apellidos: event.target.value });
+        setInput({ ...input, apellido: event.target.value });
     };
     const changeFechaNacimientoHandler = event => {
-        setInput({ ...input, fecha_nacimiento: event.target.value });
+        setInput({ ...input, fechaNacimiento: event.target.value });
     };
-    const changeAnioEgresoIDHandler = event => {
-        setInput({ ...input, anio_egreso: event.target.value });
+    const changefechaEgresoColegioIDHandler = event => {
+        setInput({ ...input, fechaEgresoColegio: event.target.value });
     };
     const changeTipoColegioHandler = event => {
-        setInput({ ...input, tipo_colegio: event.target.value });
+        setInput({ ...input, tipoColegio: event.target.value });
     };
     const changeNombreColegioHandler = event => {
-        setInput({ ...input, nombre_colegio: event.target.value });
+        setInput({ ...input, nombreColegio: event.target.value });
     };
 
     
@@ -62,13 +62,13 @@ function AgregarEstudianteComponent(props){
                 console.log(input.title);
                 let newEstudiante = {
                     rut: input.rut,
-                    nombres: input.nombres,
-                    apellidos: input.apellidos,
-                    fecha_nacimiento: input.fecha_nacimiento,
-                    tipo_colegio: input.tipo_colegio,
-                    nombre_colegio: input.nombre_colegio,
-                    anio_egreso: input.anio_egreso,
-                    anio_ingreso: "",
+                    nombre: input.nombre,
+                    apellido: input.apellido,
+                    fechaNacimiento: input.fechaNacimiento,
+                    tipoColegio: input.tipoColegio,
+                    nombreColegio: input.nombreColegio,
+                    fechaEgresoColegio: input.fechaEgresoColegio,
+                    fechaIngresoColegio: "",
                 };
                 console.log(newEstudiante);
                 EstudianteService.createEstudiante(newEstudiante);
@@ -96,39 +96,39 @@ function AgregarEstudianteComponent(props){
                         <Form.Control className="agregar" type="text" name="rut"/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="nombres" value = {input.nombres} onChange={changeNombresHandler}>
+                    <Form.Group className="mb-3" controlId="nombre" value = {input.nombre} onChange={changeNombresHandler}>
                         <Form.Label className="agregar">Nombres:</Form.Label>
-                        <Form.Control className="agregar" type="text" name="nombres"/>
+                        <Form.Control className="agregar" type="text" name="nombre"/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="apellidos" value = {input.apellido} onChange={changeApellidoHandler}>
+                    <Form.Group className="mb-3" controlId="apellido" value = {input.apellido} onChange={changeApellidoHandler}>
                         <Form.Label className="agregar">Apellidos:</Form.Label>
-                        <Form.Control className="agregar" type="text" name="apellidos"/>
+                        <Form.Control className="agregar" type="text" name="apellido"/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="fecha_nacimiento" value = {input.fecha_nacimiento} onChange={changeFechaNacimientoHandler}>
+                    <Form.Group className="mb-3" controlId="fechaNacimiento" value = {input.fechaNacimiento} onChange={changeFechaNacimientoHandler}>
                         <Form.Label className="agregar">Fecha de Nacimiento:</Form.Label>
-                        <Form.Control className="agregar" type="date" name="fecha_nacimiento"/>
+                        <Form.Control className="agregar" type="date" name="fechaNacimiento"/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="anio_egreso" value = {input.anio_egreso} onChange={changeAnioEgresoIDHandler}>
+                    <Form.Group className="mb-3" controlId="fechaEgresoColegio" value = {input.fechaEgresoColegio} onChange={changefechaEgresoColegioIDHandler}>
                         <Form.Label className="agregar">Año de egreso del colegio:</Form.Label>
-                        <Form.Control className="agregar" type="date" name="anio_egreso"/>
+                        <Form.Control className="agregar" type="date" name="fechaEgresoColegio"/>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="tipo_colegio">
+                    <Form.Group className="mb-3" controlId="tipoColegio">
                         <Form.Label className="agregar"> Tipo: </Form.Label>
-                        <select className="agregar" name="tipo_colegio" required value = {input.tipo_colegio} onChange={changeTipoColegioHandler}>
-                            <option value="0" disabled>Tipo colegio</option>
-                            <option value="1">Municipal</option>
-                            <option value="2">Subvencionado</option>
-                            <option value="3">Privado</option>
+                        <select className="agregar" name="tipoColegio" required value = {input.tipoColegio} onChange={changeTipoColegioHandler}>
+                            <option value="Tipo_Colegio" disabled>Tipo colegio</option>
+                            <option value="Municipal">Municipal</option>
+                            <option value="Subvencionado">Subvencionado</option>
+                            <option value="Privado">Privado</option>
                         </select>
                     </Form.Group>
 
-                    <Form.Group className="mb-3" controlId="nombre_colegio" value = {input.nombre_colegio} onChange={changeNombreColegioHandler}>
+                    <Form.Group className="mb-3" controlId="nombreColegio" value = {input.nombreColegio} onChange={changeNombreColegioHandler}>
                         <Form.Label className="agregar">Nombre del colegio:</Form.Label>
-                        <Form.Control className="agregar" type="text" name="nombre_colegio"/>
+                        <Form.Control className="agregar" type="text" name="nombreColegio"/>
                     </Form.Group>
                     <Button className="boton" onClick={ingresarEstudiante}>Registrar Proveedor</Button>
                 </Form>

@@ -1,119 +1,99 @@
-import React, { useState, useEffect } from "react";
+import axios from 'axios';
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HeaderComponent from "./Headers/HeaderComponent";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
-import CuotasService from "../services/CuotasService";
-import EstudianteService from "../services/EstudianteService";
+import HeaderComponent from "./Headers/HeaderComponent";
+import { Form, Button } from "react-bootstrap";
 
-function GenerarCuotasComponent() {
-    const initialState = {
-        rut: "",
-        cuotas: "",
-        comprobar: 0,
-        comprobarYaEntro: 1,
-    };
+const CUOTAS_API_BASE_URL = "http://localhost:8081/cuotas"; // Asegúrate que el puerto y la ruta coincidan con tu backend
 
-    const [estudianteEntity, setEstudianteEntity] = useState();
-    const [cuotasteEntity, setCuotasEntity] = useState([]);
-    //const [input, setInput] = useState(initialState);
-    const [input, setInput] = useState(initialState);
+const GenerarCuotasComponent = () => {
+    const [rut, setRut] = useState("");
+    const [cuotas, setCuotas] = useState("");
     const navigate = useNavigate();
 
     const navigateList = () => {
         navigate("/lista_cuotas");
-    }
-
-    const changeRutHandler = (event) => {
-        setInput({ ...input, rut: event.target.value });
-    };
-    const changeCuotasHandler = (event) => {
-        setInput({ ...input, cuotas: event.target.value });
     };
 
-    const ingresarCuotas = (event) => {
-        if (!input.cuotas) {
+    const generarCuotas = async (rut, numeroCuotas) => {
+        try {
+            const response = await axios.post(`${CUOTAS_API_BASE_URL}/generar/${rut}`, {
+                // Aquí puedes enviar datos adicionales si tu API lo requiere
+            });
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const ingresarCuotas = async () => {
+        if (!rut) {
+            Swal.fire("Ingrese un RUT", "", "warning");
+            return;
+        }
+        if (!cuotas) {
             Swal.fire("Seleccione un número de cuotas", "", "error");
             return;
         }
-        Swal.fire({
-            title: "¿Desea registrar el estudiante?",
-            text: "No podra cambiarse en caso de equivocación",
-            icon: "question",
-            showDenyButton: true,
-            confirmButtonText: "Confirmar",
-            confirmButtonColor: "rgb(68, 194, 68)",
-            denyButtonText: "Cancelar",
-            denyButtonColor: "rgb(190, 54, 54)",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                console.log("rut: " + input.rut + "\n");
-                console.log("cuotas: " + input.cuotas + "\n");
-                let cuotas = CuotasService.generarCuotas(input.rut, input.cuotas);
-                input.comprobar = 1;
-                console.log("cuotas"+cuotas+"\n");
-                if(cuotas){
-                    Swal.fire({
-                        title: "Ya tiene cuotas o no existe el usuario",
-                        timer: 2000,
-                        icon: "error",
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
+        try {
+            const response = await generarCuotas(rut, cuotas);
+            if (response.status === 201) {
+                Swal.fire("Cuotas Generadas", "Las cuotas han sido generadas correctamente", "success")
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            navigateList();
+                        }
                     });
-                }
-                else{
-                    Swal.fire({
-                        title: "Enviado",
-                        timer: 2000,
-                        icon: "success",
-                        timerProgressBar: true,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-                    navigateList();
-                }
+            } else {
+                throw new Error('Error al generar cuotas');
             }
-        });
+        } catch (error) {
+            let errorMessage = "No se pudieron generar las cuotas o no existe el usuario";
+            if (error.response) {
+                errorMessage = error.response.data.message || errorMessage;
+            } else if (error.request) {
+                errorMessage = "El servidor no está respondiendo";
+            }
+            Swal.fire("Error", errorMessage, "error");
+        }
     };
 
     return (
         <div>
-            <HeaderComponent></HeaderComponent>
-            <div class="contenedor">
-                <div class="Alinear">
+            <HeaderComponent />
+            <div className="contenedor">
+                <div className="Alinear">
                     <Form>
-                        <Form.Group className="mb-3" controlId="rut" value={input.rut} onChange={changeRutHandler}>
+                        <Form.Group className="mb-3" controlId="rut">
                             <Form.Label className="agregar">Rut:</Form.Label>
-                            <Form.Control className="agregar" type="text" name="rut" />
+                            <Form.Control 
+                                className="agregar" 
+                                type="text" 
+                                name="rut"
+                                value={rut}
+                                onChange={(e) => setRut(e.target.value)}
+                            />
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="Cuotas">
                             <Form.Label className="Cuotas"> Cuotas: </Form.Label>
-                            <select
+                            <Form.Select 
                                 id="Cuotas"
                                 name="Cuotas"
                                 required
-                                value={input.cuotas}
-                                onChange={changeCuotasHandler}
+                                value={cuotas}
+                                onChange={(e) => setCuotas(e.target.value)}
                             >
-                                <option value="Cuotas" disabled selected>
-                                    Cuotas
+                                <option value="" disabled>
+                                    Seleccione las cuotas
                                 </option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                            </select>
+                                {[...Array(10).keys()].map((number) => (
+                                    <option key={number} value={number + 1}>
+                                        {number + 1}
+                                    </option>
+                                ))}
+                            </Form.Select>
                         </Form.Group>
                         <Button id="Generar" className="Generar" onClick={ingresarCuotas}>
                             Generar
@@ -123,6 +103,6 @@ function GenerarCuotasComponent() {
             </div>
         </div>
     );
-}
+};
 
 export default GenerarCuotasComponent;

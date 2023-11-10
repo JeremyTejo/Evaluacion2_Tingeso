@@ -12,14 +12,20 @@ import HeaderComponent from "./Headers/HeaderComponent";
 
 function MainComponents() {
     const navigate = useNavigate();
-    const handleClickListaEstudiantes = () => {
-        navigate("/lista_estudiantes");
-    };
     const handleClickGenerarCuotas = () => {
         navigate("/generar_cuotas");
     };
     const handleClickListaCuotas = () => {
         navigate("/lista_cuotas");
+    };
+    // Navega al componente que lista los estudiantes
+    const handleClickListaEstudiantes = () => {
+        navigate("/lista_estudiantes");
+    };
+    
+    // Navega al componente que permite agregar un nuevo estudiante
+    const handleClickAgregarEstudiante = () => {
+        navigate("/agregar_estudiante");
     };
     return (
         <div>
@@ -28,6 +34,11 @@ function MainComponents() {
                 <div className="card" onClick={handleClickListaEstudiantes}>
                     <img id="lista_proveedores" src={Estudiantes} alt="Imagen_1" />
                     <h2>Listado de Estudiantes</h2>
+                </div>
+                <div className="card" onClick={handleClickAgregarEstudiante}>
+                    {/* Asegúrate de tener una imagen adecuada para 'Agregar Estudiante' */}
+                    <img id="agregar_estudiante" src={Estudiantes} alt="Agregar Estudiante" />
+                    <h2>Agregar Estudiante</h2>
                 </div>
                 <div className="card" onClick={handleClickGenerarCuotas}>
                     <img id="generar_cuotas" src={Cuota} alt="Imagen_2" />

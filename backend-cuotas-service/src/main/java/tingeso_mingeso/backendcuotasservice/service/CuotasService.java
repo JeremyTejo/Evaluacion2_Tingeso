@@ -29,8 +29,6 @@ public class CuotasService {
         this.administracionService = administracionService;
     }
 
-    // ... Otros métodos del servicio ...
-
     public void generarCuotas(String rut) {
         EstudianteEntity estudiante = findByRut(rut);
         int cantidadCuotas = administracionService.obtenerNumeroMaximoCuotas(estudiante.getTipoColegio());
@@ -58,7 +56,7 @@ public class CuotasService {
 
     private EstudianteEntity findByRut(String rut) {
         ResponseEntity<EstudianteEntity> response = restTemplate.exchange(
-                "http://localhost:8080/estudiante/" + rut,
+                "http://localhost:8083/estudiante/" + rut,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<EstudianteEntity>() {}
