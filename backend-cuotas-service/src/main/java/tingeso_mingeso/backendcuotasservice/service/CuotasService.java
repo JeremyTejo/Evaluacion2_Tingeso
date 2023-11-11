@@ -57,7 +57,7 @@ public class CuotasService {
 
     private EstudianteEntity findByRut(String rut) {
         ResponseEntity<EstudianteEntity> response = restTemplate.exchange(
-                "http://localhost:8082/estudiante/" + rut,
+                "http://localhost:8080/estudiante/" + rut,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<EstudianteEntity>() {}
