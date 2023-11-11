@@ -30,8 +30,9 @@ public class CuotasService {
     }
 
 
-    public void generarCuotas(String rut, int numeroCuotas) {
+    public void generarCuotas(String rut) {
         EstudianteEntity estudiante = findByRut(rut);
+        int numeroCuotas = administracionService.obtenerNumeroMaximoCuotas(estudiante.getTipoColegio());
         descuentoArancelGeneracionCuotas(estudiante, numeroCuotas);
     }
 
@@ -84,5 +85,20 @@ public class CuotasService {
 
         // Guardar la cuota actualizada
         return cuotaRepository.save(cuota);
+    }
+    public List<CuotasEntity> getAllCuotas() {
+        return cuotaRepository.findAll();
+    }
+
+    public CuotasEntity getCuotaById(Long id) {
+        return cuotaRepository.findById(id).orElse(null);
+    }
+
+    public CuotasEntity saveCuota(CuotasEntity cuota) {
+        return cuotaRepository.save(cuota);
+    }
+
+    public void deleteCuota(Long id) {
+        cuotaRepository.deleteById(id);
     }
 }

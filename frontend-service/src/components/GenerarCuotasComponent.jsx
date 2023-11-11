@@ -25,14 +25,13 @@ const GenerarCuotasComponent = () => {
     };
 
     const ingresarCuotas = async () => {
-        if (!rut || !numeroCuotas) {
-            Swal.fire("Faltan datos", "Por favor, ingrese un RUT y el número de cuotas", "warning");
+        if (!rut) {
+            Swal.fire("Faltan datos", "Por favor, ingrese un RUT", "warning");
             return;
         }
-
         try {
-            const response = await generarCuotas(rut, numeroCuotas);
-            if (response.status === 201) {
+            const response = await CuotasService.generarCuotas(rut);
+            if (response.status === 200) { // Cambiado de 201 a 200
                 Swal.fire("Cuotas Generadas", "Las cuotas han sido generadas correctamente", "success")
                     .then((result) => {
                         if (result.isConfirmed) {
@@ -45,14 +44,13 @@ const GenerarCuotasComponent = () => {
         } catch (error) {
             let errorMessage = "No se pudieron generar las cuotas o no existe el usuario";
             if (error.response) {
-                errorMessage = error.response.data.message || errorMessage;
+                errorMessage = error.response.data || errorMessage; // Asegúrate que esto coincida con la estructura del mensaje de error del backend
             } else if (error.request) {
                 errorMessage = "El servidor no está respondiendo";
             }
             Swal.fire("Error", errorMessage, "error");
         }
     };
-
     return (
         <div>
             <HeaderComponent />

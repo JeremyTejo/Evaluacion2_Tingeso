@@ -9,6 +9,7 @@ import tingeso_mingeso.backendcuotasservice.model.EstudianteEntity;
 import tingeso_mingeso.backendcuotasservice.service.AdministracionService;
 import tingeso_mingeso.backendcuotasservice.service.CuotasService;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,36 +25,48 @@ public class CuotasController {
     }
 
     // Endpoint para generar cuotas para un estudiante dado su RUT
+    // HU3: Generar cuotas de pago
     @PostMapping("/generar/{rut}")
-    public ResponseEntity<?> generarCuotas(@PathVariable String rut, @RequestParam int numeroCuotas) {
+    public ResponseEntity<?> generarCuotas(@PathVariable String rut) {
         try {
-            cuotasService.generarCuotas(rut, numeroCuotas);
-            return new ResponseEntity<>("Cuotas generadas correctamente.", HttpStatus.CREATED);
+            cuotasService.generarCuotas(rut);
+            return ResponseEntity.ok("Cuotas generadas exitosamente para el estudiante con RUT: " + rut);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body("Error al generar cuotas: " + e.getMessage());
         }
     }
 
-    // Endpoint para obtener todas las cuotas de un estudiante por RUT
-    @GetMapping("/estudiantes/{rut}")
-    public ResponseEntity<List<CuotasEntity>> obtenerCuotasPorRut(@PathVariable String rut) {
+
+    // HU4: Listar cuotas de un estudiante
+    @GetMapping("/estudiante/{rut}")
+    public ResponseEntity<List<CuotasEntity>> listarCuotasEstudiante(@PathVariable String rut) {
         List<CuotasEntity> cuotas = cuotasService.findCuotasByRut(rut);
         if (cuotas.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.noContent().build();
         }
-        return new ResponseEntity<>(cuotas, HttpStatus.OK);
+        return ResponseEntity.ok(cuotas);
     }
 
+
     // Endpoint para registrar el pago de una cuota
-    @PostMapping("/pagar/{idCuota}")
+    // HU5: Registrar pago de cuota
+    @PutMapping("/pagar/{idCuota}")
     public ResponseEntity<?> registrarPagoCuota(@PathVariable Long idCuota) {
         try {
             CuotasEntity cuotaPagada = cuotasService.registrarPagoCuota(idCuota);
-            return new ResponseEntity<>(cuotaPagada, HttpStatus.OK);
+            return ResponseEntity.ok(cuotaPagada);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "Error al procesar el pago de la cuota.";
+            return ResponseEntity.badRequest().body(errorMessage);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            // Captura cualquier otra excepción inesperada
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "Error interno del servidor.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
     }
+
 
 
 }

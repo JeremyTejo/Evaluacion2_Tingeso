@@ -22,7 +22,6 @@ public class EstudianteService {
     }
 
     public Estudiante saveEstudiante(Estudiante estudiante) {
-        Estudiante estudianteNuevo = estudianteRepository.save(estudiante);
         return estudianteRepository.save(estudiante);
     }
 
