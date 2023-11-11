@@ -10,9 +10,10 @@ import tingeso_mingeso.backendestudiantesservice.service.EstudianteService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/estudiantes")
+@CrossOrigin(origins = "http://localhost:3000")
 public class EstudianteControlador {
 
     @Autowired

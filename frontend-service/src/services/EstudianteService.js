@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ESTUDIANTE_API_URL = "http://localhost:8080/estudiantes/";
+const ESTUDIANTE_API_URL = "http://localhost:8082/estudiantes/";
 
 class EstudianteService {
 

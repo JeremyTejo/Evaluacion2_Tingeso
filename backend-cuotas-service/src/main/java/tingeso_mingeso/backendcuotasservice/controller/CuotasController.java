@@ -25,9 +25,9 @@ public class CuotasController {
 
     // Endpoint para generar cuotas para un estudiante dado su RUT
     @PostMapping("/generar/{rut}")
-    public ResponseEntity<?> generarCuotas(@PathVariable String rut) {
+    public ResponseEntity<?> generarCuotas(@PathVariable String rut, @RequestParam int numeroCuotas) {
         try {
-            cuotasService.generarCuotas(rut);
+            cuotasService.generarCuotas(rut, numeroCuotas);
             return new ResponseEntity<>("Cuotas generadas correctamente.", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -35,7 +35,7 @@ public class CuotasController {
     }
 
     // Endpoint para obtener todas las cuotas de un estudiante por RUT
-    @GetMapping("/estudiante/{rut}")
+    @GetMapping("/estudiantes/{rut}")
     public ResponseEntity<List<CuotasEntity>> obtenerCuotasPorRut(@PathVariable String rut) {
         List<CuotasEntity> cuotas = cuotasService.findCuotasByRut(rut);
         if (cuotas.isEmpty()) {

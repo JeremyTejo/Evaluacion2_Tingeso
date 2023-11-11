@@ -1,15 +1,14 @@
-import axios from 'axios';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import HeaderComponent from "./Headers/HeaderComponent";
 import { Form, Button } from "react-bootstrap";
-
-const CUOTAS_API_BASE_URL = "http://localhost:8081/cuotas"; // Asegúrate que el puerto y la ruta coincidan con tu backend
+import CuotasService from '../services/CuotasService';
 
 const GenerarCuotasComponent = () => {
-    const [rut, setRut] = useState("");
-    const [cuotas, setCuotas] = useState("");
+    const [rut, setRut] = useState('');
+    const [numeroCuotas, setNumeroCuotas] = useState('');
+
     const navigate = useNavigate();
 
     const navigateList = () => {
@@ -18,9 +17,7 @@ const GenerarCuotasComponent = () => {
 
     const generarCuotas = async (rut, numeroCuotas) => {
         try {
-            const response = await axios.post(`${CUOTAS_API_BASE_URL}/generar/${rut}`, {
-                // Aquí puedes enviar datos adicionales si tu API lo requiere
-            });
+            const response = await CuotasService.generarCuotas(rut, numeroCuotas);
             return response;
         } catch (error) {
             throw error;
@@ -28,16 +25,13 @@ const GenerarCuotasComponent = () => {
     };
 
     const ingresarCuotas = async () => {
-        if (!rut) {
-            Swal.fire("Ingrese un RUT", "", "warning");
+        if (!rut || !numeroCuotas) {
+            Swal.fire("Faltan datos", "Por favor, ingrese un RUT y el número de cuotas", "warning");
             return;
         }
-        if (!cuotas) {
-            Swal.fire("Seleccione un número de cuotas", "", "error");
-            return;
-        }
+
         try {
-            const response = await generarCuotas(rut, cuotas);
+            const response = await generarCuotas(rut, numeroCuotas);
             if (response.status === 201) {
                 Swal.fire("Cuotas Generadas", "Las cuotas han sido generadas correctamente", "success")
                     .then((result) => {
@@ -66,36 +60,24 @@ const GenerarCuotasComponent = () => {
                 <div className="Alinear">
                     <Form>
                         <Form.Group className="mb-3" controlId="rut">
-                            <Form.Label className="agregar">Rut:</Form.Label>
+                            <Form.Label>RUT:</Form.Label>
                             <Form.Control 
-                                className="agregar" 
                                 type="text" 
-                                name="rut"
-                                value={rut}
-                                onChange={(e) => setRut(e.target.value)}
+                                value={rut} 
+                                onChange={(e) => setRut(e.target.value)} 
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="Cuotas">
-                            <Form.Label className="Cuotas"> Cuotas: </Form.Label>
-                            <Form.Select 
-                                id="Cuotas"
-                                name="Cuotas"
-                                required
-                                value={cuotas}
-                                onChange={(e) => setCuotas(e.target.value)}
-                            >
-                                <option value="" disabled>
-                                    Seleccione las cuotas
-                                </option>
-                                {[...Array(10).keys()].map((number) => (
-                                    <option key={number} value={number + 1}>
-                                        {number + 1}
-                                    </option>
-                                ))}
-                            </Form.Select>
+                        <Form.Group className="mb-3" controlId="numeroCuotas">
+                            <Form.Label>Número de Cuotas:</Form.Label>
+                            <Form.Control 
+                                type="number" 
+                                value={numeroCuotas} 
+                                onChange={(e) => setNumeroCuotas(e.target.value)} 
+                            />
                         </Form.Group>
-                        <Button id="Generar" className="Generar" onClick={ingresarCuotas}>
+
+                        <Button variant="primary" onClick={ingresarCuotas}>
                             Generar
                         </Button>
                     </Form>
@@ -106,3 +88,4 @@ const GenerarCuotasComponent = () => {
 };
 
 export default GenerarCuotasComponent;
+
