@@ -10,4 +10,6 @@ import java.util.List;
 public interface CuotasRepository extends JpaRepository<CuotasEntity, Long> {
 
     List<CuotasEntity> findCuotasByRut(String rut);
+
+    List<CuotasEntity> findCuotasPendientesByRut(String rut);
 }

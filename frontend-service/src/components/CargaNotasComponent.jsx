@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import NotasService from '../services/NotasService';
-
+import HeaderComponent from './Headers/HeaderComponent'
 
 const CargaNotasComponent = () => {
-    // Estilos
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
+    const [notasImportadas, setNotasImportadas] = useState([]);
+
     const estilos = {
         contenedor: {
             margin: 'auto',
@@ -29,16 +30,54 @@ const CargaNotasComponent = () => {
             backgroundColor: '#4CAF50',
             color: 'white',
             cursor: 'pointer',
+        },
+        lista: {
+            listStyleType: 'none',
+            padding: 0,
+        },
+        itemLista: {
+            backgroundColor: '#e0e0e0',
+            margin: '5px 0',
+            padding: '10px',
+            borderRadius: '5px',
         }
     };
 
-    // ... (tu lógica del componente)
+    const manejarCambioArchivo = (evento) => {
+        setArchivoSeleccionado(evento.target.files[0]);
+    };
+
+    const manejarEnvioArchivo = () => {
+        if (archivoSeleccionado) {
+            NotasService.importarNotas(archivoSeleccionado)
+                .then(response => {
+                    setNotasImportadas(response.data);
+                })
+                .catch(error => {
+                    console.error("Error al subir el archivo:", error);
+                });
+        }
+    };
 
     return (
         <div style={estilos.contenedor}>
+            <HeaderComponent/>
             <h2 style={estilos.titulo}>Cargar Notas</h2>
-            <input type="file" /* ...otros atributos... */ />
-            <button style={estilos.boton}>Subir Archivo</button>
+            <input type="file" onChange={manejarCambioArchivo} />
+            <button style={estilos.boton} onClick={manejarEnvioArchivo}>Subir Archivo</button>
+
+            {notasImportadas.length > 0 && (
+                <div>
+                    <h3 style={estilos.titulo}>Notas Importadas</h3>
+                    <ul style={estilos.lista}>
+                        {notasImportadas.map((nota, index) => (
+                            <li key={index} style={estilos.itemLista}>
+                                RUT: {nota.rutEstudiante}, Fecha: {nota.fechaExamen}, Puntuación: {nota.puntaje}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 };

@@ -86,19 +86,38 @@ public class CuotasService {
         // Guardar la cuota actualizada
         return cuotaRepository.save(cuota);
     }
-    public List<CuotasEntity> getAllCuotas() {
-        return cuotaRepository.findAll();
-    }
+    public void actualizarPlanillaPagos(String rut) {
+        // Obtener datos del estudiante y planilla...
+        double promedioPruebas = obtenerPromedioPruebas(rut);
+        int descuento = calcularDescuentoPorPromedio(promedioPruebas);
 
-    public CuotasEntity getCuotaById(Long id) {
-        return cuotaRepository.findById(id).orElse(null);
-    }
+        // Obtener todas las cuotas pendientes del estudiante
+        List<CuotasEntity> cuotasPendientes = cuotaRepository.findCuotasPendientesByRut(rut);
 
-    public CuotasEntity saveCuota(CuotasEntity cuota) {
-        return cuotaRepository.save(cuota);
+        // Aplicar descuentos a cada cuota pendiente
+        for (CuotasEntity cuota : cuotasPendientes) {
+            double montoDescuento = cuota.getMontoCuota() * descuento / 100.0;
+            cuota.setMontoCuota(cuota.getMontoCuota() - montoDescuento);
+            cuotaRepository.save(cuota);
+        }
     }
-
-    public void deleteCuota(Long id) {
-        cuotaRepository.deleteById(id);
+    private double obtenerPromedioPruebas(String rut) {
+        String url = "http://localhost:8080/notas/promedio/" + rut;
+        ResponseEntity<Double> response = restTemplate.exchange(
+                url, HttpMethod.GET, null, new ParameterizedTypeReference<Double>() {}
+        );
+        return response.getBody();
+    }
+    private int calcularDescuentoPorPromedio(double promedio) {
+        // Implementar la lógica para calcular el descuento en base al promedio
+        if (promedio >= 950) {
+            return 10;
+        } else if (promedio >= 900) {
+            return 5;
+        } else if (promedio >= 850) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 }
