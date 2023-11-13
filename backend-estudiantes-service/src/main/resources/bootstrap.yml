@@ -9,10 +9,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
-  cloud:
-    config:
-      enabled: true
-      uri: http://localhost:8081
   datasource:
     plataform: postgres
     driver-class-name: org.postgresql.Driver
@@ -20,6 +16,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 12345678
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
   servlet:
     multipart:
       max-file-size: 5MB

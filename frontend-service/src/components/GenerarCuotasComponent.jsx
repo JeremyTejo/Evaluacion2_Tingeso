@@ -65,16 +65,6 @@ const GenerarCuotasComponent = () => {
                                 onChange={(e) => setRut(e.target.value)} 
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3" controlId="numeroCuotas">
-                            <Form.Label>Número de Cuotas:</Form.Label>
-                            <Form.Control 
-                                type="number" 
-                                value={numeroCuotas} 
-                                onChange={(e) => setNumeroCuotas(e.target.value)} 
-                            />
-                        </Form.Group>
-
                         <Button variant="primary" onClick={ingresarCuotas}>
                             Generar
                         </Button>

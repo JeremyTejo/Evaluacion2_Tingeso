@@ -119,7 +119,7 @@ function AgregarEstudianteComponent(props){
                     <Form.Group className="mb-3" controlId="tipoColegio">
                         <Form.Label className="agregar"> Tipo: </Form.Label>
                         <select className="agregar" name="tipoColegio" required value = {input.tipoColegio} onChange={changeTipoColegioHandler}>
-                            <option value="Tipo_Colegio" disabled>Tipo colegio</option>
+                            <option value="tipoColegio" disabled>Tipo colegio</option>
                             <option value="Municipal">Municipal</option>
                             <option value="Subvencionado">Subvencionado</option>
                             <option value="Privado">Privado</option>

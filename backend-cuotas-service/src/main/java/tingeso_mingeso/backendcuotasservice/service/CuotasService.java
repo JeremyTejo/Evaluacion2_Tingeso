@@ -29,7 +29,15 @@ public class CuotasService {
         this.administracionService = administracionService;
     }
 
-
+    private EstudianteEntity findByRut(String rut) {
+        ResponseEntity<EstudianteEntity> response = restTemplate.exchange(
+                "http://localhost:8080/estudiantes/" + rut,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<EstudianteEntity>() {}
+        );
+        return response.getBody();
+    }
     public void generarCuotas(String rut) {
         EstudianteEntity estudiante = findByRut(rut);
         int numeroCuotas = administracionService.obtenerNumeroMaximoCuotas(estudiante.getTipoColegio());
@@ -55,15 +63,6 @@ public class CuotasService {
         }
     }
 
-    private EstudianteEntity findByRut(String rut) {
-        ResponseEntity<EstudianteEntity> response = restTemplate.exchange(
-                "http://localhost:8080/estudiante/" + rut,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<EstudianteEntity>() {}
-        );
-        return response.getBody();
-    }
 
     public List<CuotasEntity> findCuotasByRut(String rut) {
         return cuotaRepository.findCuotasByRut(rut);

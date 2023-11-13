@@ -12,9 +12,10 @@ import tingeso_mingeso.backendcuotasservice.service.CuotasService;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+
 @RestController
 @RequestMapping("/cuotas")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CuotasController {
 
     private final CuotasService cuotasService;
@@ -29,16 +30,19 @@ public class CuotasController {
     @PostMapping("/generar/{rut}")
     public ResponseEntity<?> generarCuotas(@PathVariable String rut) {
         try {
+            System.out.println("Generando cuotas para el RUT: " + rut);
             cuotasService.generarCuotas(rut);
             return ResponseEntity.ok("Cuotas generadas exitosamente para el estudiante con RUT: " + rut);
         } catch (Exception e) {
+            System.out.println("Error al generar cuotas: " + e.getMessage());
             return ResponseEntity.badRequest().body("Error al generar cuotas: " + e.getMessage());
         }
     }
 
 
+
     // HU4: Listar cuotas de un estudiante
-    @GetMapping("/estudiante/{rut}")
+    @GetMapping("/estudiantes/{rut}")
     public ResponseEntity<List<CuotasEntity>> listarCuotasEstudiante(@PathVariable String rut) {
         List<CuotasEntity> cuotas = cuotasService.findCuotasByRut(rut);
         if (cuotas.isEmpty()) {

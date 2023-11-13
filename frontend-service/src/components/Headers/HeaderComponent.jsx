@@ -10,10 +10,9 @@ function HeaderComponent() {
         <div>
             <header className="header">
                 <div className="logo">
-                    <h1 onClick={handleClick}>MilkStgo</h1>
+                    <h1 onClick={handleClick}>Academia Preuniversitaria TopEducation 2023 </h1>
                 </div>
                 <nav></nav>
-                <a className="btn" href="/agregar_estudiante"><button>Ingresar nuevo Proveedor</button></a>
             </header>
         </div>
     )
