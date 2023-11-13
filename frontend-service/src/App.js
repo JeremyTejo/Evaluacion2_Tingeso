@@ -5,6 +5,8 @@ import AgregarEstudianteComponent from "./components/AgregarEstudianteComponent"
 import ListadoEstudianteComponent from "./components/ListadoEstudianteComponent";
 import GenerarCuotasComponent from "./components/GenerarCuotasComponent";
 import VisualizarCuotasComponent from './components/VisualizarCuotasComponent'; // Ajusta la ruta según la ubicación de tu componente
+import CargaNotasComponent from './components/CargaNotasComponent';
+
 
 
 
@@ -17,6 +19,7 @@ function App() {
                 <Route path="/lista_estudiantes" element={<ListadoEstudianteComponent />} />
                 <Route path="/generar_cuotas" element={<GenerarCuotasComponent />} />
                 <Route path="/visualizar_cuotas" element={<VisualizarCuotasComponent />} />
+                <Route path="/cargar_notas" element={<CargaNotasComponent />} />
             </Routes>
         </Router>
     );

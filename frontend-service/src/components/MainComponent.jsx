@@ -28,7 +28,9 @@ function MainComponent() {
     const handleClickVisualizarCuotas = () => {
         navigate("/visualizar_cuotas");
     };
-
+    const handleClickCargarNotas = () => {
+        navigate("/cargar_notas");
+    };    
     return (
         <div>
             <HeaderComponent></HeaderComponent>
@@ -48,6 +50,10 @@ function MainComponent() {
                 <div className="card" onClick={handleClickVisualizarCuotas}>
                     <img id="visualizar_cuotas" src={ListaCuotas} alt="Visualizar Cuotas" />
                     <h2>Visualizar Cuotas</h2>
+                </div>
+                <div className="card" onClick={handleClickCargarNotas}>
+                    <img id="cargar_notas" src={ListaCuotas} alt="Cargar Notas" />
+                    <h2>Cargar Notas</h2>
                 </div>
             </div>
         </div>
