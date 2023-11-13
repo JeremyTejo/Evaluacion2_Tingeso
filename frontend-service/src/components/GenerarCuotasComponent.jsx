@@ -12,7 +12,7 @@ const GenerarCuotasComponent = () => {
     const navigate = useNavigate();
 
     const navigateList = () => {
-        navigate("/lista_cuotas");
+        navigate("/visualizar_cuotas");
     };
 
     const generarCuotas = async (rut, numeroCuotas) => {

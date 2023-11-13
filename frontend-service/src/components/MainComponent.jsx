@@ -5,28 +5,30 @@ import "../styles/listas.css";
 import "../styles/subir_excel.css";
 import "../styles/navbar.css";
 import "../styles/agregar.css";
-import Estudiantes from "../images/estudiantes.png"
-import ListaCuotas from "../images/plan-de-estudios.png"
-import Cuota from "../images/grafico-circular.png"
+import Estudiantes from "../images/estudiantes.png";
+import ListaCuotas from "../images/plan-de-estudios.png"; // Asegúrate de que esta imagen sea la correcta
+import Cuota from "../images/grafico-circular.png";
 import HeaderComponent from "./Headers/HeaderComponent";
 
 function MainComponent() {
     const navigate = useNavigate();
+
     const handleClickGenerarCuotas = () => {
         navigate("/generar_cuotas");
     };
-    // Navega al componente que lista los estudiantes
+
     const handleClickListaEstudiantes = () => {
         navigate("/lista_estudiantes");
     };
-    
-    // Navega al componente que permite agregar un nuevo estudiante
+
     const handleClickAgregarEstudiante = () => {
         navigate("/agregar_estudiante");
     };
-    const handleClickListaCuotas = () => {
-        navigate("/lista_cuotas");
+
+    const handleClickVisualizarCuotas = () => {
+        navigate("/visualizar_cuotas");
     };
+
     return (
         <div>
             <HeaderComponent></HeaderComponent>
@@ -43,9 +45,9 @@ function MainComponent() {
                     <img id="generar_cuotas" src={Cuota} alt="Imagen_2" />
                     <h2>Generar Cuotas</h2>
                 </div>
-                <div className="card" onClick={handleClickListaCuotas}>
-                    <img id="lista_cuotas" src={ListaCuotas} alt="Imagen_3"/>
-                    <h2>Listado de Cuotas</h2>
+                <div className="card" onClick={handleClickVisualizarCuotas}>
+                    <img id="visualizar_cuotas" src={ListaCuotas} alt="Visualizar Cuotas" />
+                    <h2>Visualizar Cuotas</h2>
                 </div>
             </div>
         </div>

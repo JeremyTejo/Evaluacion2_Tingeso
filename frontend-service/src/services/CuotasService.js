@@ -8,8 +8,11 @@ class CuotasService {
     
 
 
-    getCuotas(rut){
+    obtenerCuotasPorEstudiante(rut) {
         return axios.get(`${CUOTAS_API_URL}estudiantes/${rut}`);
+    }
+    pagarCuota(idCuota) {
+        return axios.put(`${CUOTAS_API_URL}pagar/${idCuota}`);
     }
 }
 
