@@ -8,7 +8,7 @@ eureka:
     service-url:
       default-zone: http://backend-eureka-service:8761/eureka
   instance:
-    hostname: localhost
+    hostname: backend-gateway-service
 
 spring:
   cloud:
@@ -37,4 +37,4 @@ spring:
         - id: backend-notas-service
           uri: lb://backend-notas-service
           predicates:
-            -Path=/notas/**
+            - Path=/notas/**

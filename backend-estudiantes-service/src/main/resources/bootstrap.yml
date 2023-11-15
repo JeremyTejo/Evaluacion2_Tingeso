@@ -1,3 +1,9 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://backend-eureka-service:8761/eureka
 spring:
   devtools:
     restart:
@@ -12,7 +18,7 @@ spring:
   datasource:
     plataform: postgres
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_DB_HOST}:5432/${POSTGRES_DB_ESTUDIANTES}?useSSL=false
+    url: jdbc:postgresql://${POSTGRES_DS_HOST}:5432/${POSTGRES_DB_ESTUDIANTES}?useSSL=false
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
     hikari:
