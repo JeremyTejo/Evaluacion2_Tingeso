@@ -6,7 +6,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      default-zone: http://${EUREKA:localhost}:8761/eureka
+      default-zone: http://backend-eureka-service:8761/eureka
   instance:
     hostname: localhost
 
@@ -34,3 +34,7 @@ spring:
           uri: lb://backend-cuotas-service
           predicates:
             - Path=/cuotas/**
+        - id: backend-notas-service
+          uri: lb://backend-notas-service
+          predicates:
+            -Path=/notas/**
