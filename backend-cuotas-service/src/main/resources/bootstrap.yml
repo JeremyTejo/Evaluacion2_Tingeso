@@ -9,13 +9,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
-  datasource:
-    plataform: postgres
-    driver-class-name: org.postgresql.Driver
-    dbname: Cuotas
-    url: jdbc:postgresql://localhost:5432/Cuotas
-    username: postgres
-    password: 12345678
   cloud:
     config:
       enabled: true
@@ -24,3 +17,9 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
+  datasource:
+    plataform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_DB_HOST}:5432/${POSTGRES_DB_CUOTAS}?useSSL=false
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}

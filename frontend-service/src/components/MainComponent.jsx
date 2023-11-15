@@ -6,7 +6,7 @@ import "../styles/subir_excel.css";
 import "../styles/navbar.css";
 import "../styles/agregar.css";
 import Estudiantes from "../images/estudiantes.png";
-import ListaCuotas from "../images/plan-de-estudios.png"; // Asegúrate de que esta imagen sea la correcta
+import ListaCuotas from "../images/plan-de-estudios.png"; 
 import Cuota from "../images/grafico-circular.png";
 import HeaderComponent from "./Headers/HeaderComponent";
 
